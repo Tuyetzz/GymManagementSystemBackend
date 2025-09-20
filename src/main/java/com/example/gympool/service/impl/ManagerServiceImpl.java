@@ -24,29 +24,34 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Manager getManagerById(Long id) {
         return managerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Manager not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Manager not found with id: " + id));
     }
 
     @Override
     public Manager createManager(Manager manager) {
-        manager.setRole("MANAGER"); // ép role cho chắc chắn
         return managerRepository.save(manager);
     }
 
     @Override
     public Manager updateManager(Long id, Manager managerDetails) {
         Manager manager = getManagerById(id);
-        manager.setEmail(managerDetails.getEmail());
-        manager.setPassword(managerDetails.getPassword());
-        manager.setFullName(managerDetails.getFullName());
-        manager.setDob(managerDetails.getDob());
-        manager.setGender(managerDetails.getGender());
-        manager.setPhone(managerDetails.getPhone());
+
+        // cập nhật field chung từ User
+        if (managerDetails.getEmail() != null) manager.setEmail(managerDetails.getEmail());
+        if (managerDetails.getPassword() != null) manager.setPassword(managerDetails.getPassword());
+        if (managerDetails.getFullName() != null) manager.setFullName(managerDetails.getFullName());
+        if (managerDetails.getDob() != null) manager.setDob(managerDetails.getDob());
+        if (managerDetails.getGender() != null) manager.setGender(managerDetails.getGender());
+        if (managerDetails.getPhone() != null) manager.setPhone(managerDetails.getPhone());
+
         return managerRepository.save(manager);
     }
 
     @Override
     public void deleteManager(Long id) {
+        if (!managerRepository.existsById(id)) {
+            throw new IllegalArgumentException("Manager not found with id: " + id);
+        }
         managerRepository.deleteById(id);
     }
 }

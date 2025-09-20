@@ -29,7 +29,6 @@ public class ManagerController {
 
     @PostMapping
     public ResponseEntity<Manager> createManager(@RequestBody Manager manager) {
-        manager.setRole("MANAGER");
         return ResponseEntity.ok(managerService.createManager(manager));
     }
 

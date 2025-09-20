@@ -41,8 +41,4 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @GetMapping("/role/{role}")
-    public List<User> getUsersByRole(@PathVariable String role) {
-        return userService.getUsersByRole(role);
-    }
 }
