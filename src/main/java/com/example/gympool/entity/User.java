@@ -23,7 +23,7 @@ public class User {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 255)
     private String password;
 
     @Column(nullable = false, length = 50)
@@ -38,4 +38,5 @@ public class User {
     @Column(nullable = false, length = 50)
     private String phone;
 
+    private String role;
 }

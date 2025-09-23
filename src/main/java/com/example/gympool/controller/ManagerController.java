@@ -27,6 +27,13 @@ public class ManagerController {
         return ResponseEntity.ok(managerService.getManagerById(id));
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Manager> getManagerByEmail(@PathVariable String email) {
+        return managerService.getManagerByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<Manager> createManager(@RequestBody Manager manager) {
         return ResponseEntity.ok(managerService.createManager(manager));

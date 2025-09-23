@@ -1,6 +1,5 @@
 package com.example.gympool.service.impl;
 
-import com.example.gympool.dto.ProductDto;
 import com.example.gympool.entity.Product;
 import com.example.gympool.repository.ProductRepository;
 import com.example.gympool.service.ProductService;

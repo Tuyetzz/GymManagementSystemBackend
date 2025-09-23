@@ -11,11 +11,7 @@ import java.util.Date;
 @Setter
 @Table(name="members")
 public class Member extends User {
-
-    @Column(nullable = false, length = 50)
     private String membership;
-
-    @Column(nullable = false)
     private Date joinDate;
 
     private String status;

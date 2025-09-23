@@ -4,7 +4,7 @@ import com.example.gympool.entity.Manager;
 import com.example.gympool.repository.ManagerRepository;
 import com.example.gympool.service.ManagerService;
 import org.springframework.stereotype.Service;
-
+import java.util.Optional;
 import java.util.List;
 
 @Service
@@ -25,6 +25,11 @@ public class ManagerServiceImpl implements ManagerService {
     public Manager getManagerById(Long id) {
         return managerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Manager not found with id: " + id));
+    }
+
+    @Override
+    public Optional<Manager> getManagerByEmail(String email) {
+        return managerRepository.findByEmail(email);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.gympool.service;
 
-import com.example.gympool.dto.ProductDto;
 import com.example.gympool.entity.Product;
 
 import java.util.List;
