@@ -1,0 +1,370 @@
+API List : 8080
+Product: /api/product	put, get, delete:/{id}	get:/name/{name}
+Provider: /api/provider	put, get, delete:/{id}
+Receptionist: /api/receptionist	put, get, delete:/{id}	get: /email/{email}
+ImportBill: /api/import-bills	put, get, delete:/{id}	post: /upload
+Bill: /api/bills	put, get, delete:/{id}	get: /receptionist/{receptionistId}
+ClassTemplate : /api/classtemplate 	put, get, delete:/{id}
+ClassSchedule: /api/classschedule	put, get, delete:/{id}
+ClassRegistration: /api/class-registrations	put, get, delete:/{id} 	get:/staff/{staffId}		/classschedule/{scheduleId}
+FollowClass: /api/follow-classes	put, get, delete:/{id} 	get:/member/{memberId}		/classschedule/{scheduleId}
+
+Json
+Product
+{
+  "name": "T-Shirt Gym",
+  "type": "clothes",
+  "price": 250000,
+  "brand": "Nike",
+  "quantity": 0
+}
+{
+  "name": "Protein Powder 2kg",
+  "type": "powder",
+  "price": 850000,
+  "brand": "Optimum Nutrition",
+  "quantity": 0
+}
+{
+  "name": "Shorts Training",
+  "type": "clothes",
+  "price": 180000,
+  "brand": "Adidas",
+  "quantity": 0
+}
+{
+  "name": "Mass Gainer 5kg",
+  "type": "powder",
+  "price": 1200000,
+  "brand": "Dymatize",
+  "quantity": 0
+}
+{
+  "name": "Gym Gloves",
+  "type": "clothes",
+  "price": 120000,
+  "brand": "Under Armour",
+  "quantity": 0
+}
+
+Provider
+{
+  "name": "Hoàng Gia Sport",
+  "brand": "Nike",
+  "phone": "0905123456"
+}
+{
+  "name": "Thể Thao Việt",
+  "brand": "Adidas",
+  "phone": "0987123456"
+}
+{
+  "name": "Gym Pro Supplier",
+  "brand": "Optimum Nutrition",
+  "phone": "0932123456"
+}
+{
+  "name": "ABC Fitness",
+  "brand": "Under Armour",
+  "phone": "0912345678"
+}
+{
+  "name": "Thực phẩm thể hình HN",
+  "brand": "Dymatize",
+  "phone": "0976123456"
+}
+
+Member
+{
+  "email": "member01@gmail.com",
+  "password": "123456",
+  "fullName": "Nguyen Van A",
+  "dob": "1998-05-20",
+  "gender": "MALE",
+  "phone": "0905123456"
+}
+
+Staff
+{
+  "email": "pt01@gmail.com",
+  "password": "123456",
+  "fullName": "Tran Thi B",
+  "dob": "1995-11-15",
+  "gender": "FEMALE",
+  "phone": "0912345678",
+  "role": "STAFF"
+}
+{
+  "email": "pt02@gmail.com",
+  "password": "123456",
+  "fullName": "Pham Van PT",
+  "dob": "1992-07-15",
+  "gender": "MALE",
+  "phone": "0908000111",
+  "role": "STAFF"
+}
+{
+  "email": "teacher01@gmail.com",
+  "password": "123456",
+  "fullName": "Nguyen Thi Teacher",
+  "dob": "1990-11-22",
+  "gender": "FEMALE",
+  "phone": "0908000222",
+  "role": "STAFF"
+}
+
+Receptionist
+{
+  "email": "reception01@gmail.com",
+  "password": "123456",
+  "fullName": "Le Van C",
+  "dob": "2000-03-10",
+  "gender": "MALE",
+  "phone": "0987123456",
+  "role": "RECEPTIONIST"
+}
+
+ImportBill
+{
+  "date": "2025-09-30T10:30:00",
+  "provider": {
+    "id": 1
+  },
+  "receptionist": {
+    "id": 3
+  },
+  "importedProducts": [
+    {
+      "product": {
+        "id": 2
+      },
+      "quantity": 20
+    },
+    {
+      "product": {
+        "id": 4
+      },
+      "quantity": 15
+    }
+  ]
+}
+{
+  "date": "2025-09-29T16:45:00",
+  "provider": {
+    "id": 2
+  },
+  "receptionist": {
+    "id": 3
+  },
+  "importedProducts": [
+    {
+      "product": {
+        "id": 1
+      },
+      "quantity": 50
+    },
+    {
+      "product": {
+        "id": 5
+      },
+      "quantity": 10
+    }
+  ]
+}
+
+Bill
+{
+  "paymentMethod": "CASH",
+  "paymentStatus": "PAID",
+  "date": "2025-09-30T16:00:00",
+  "receptionist": {
+    "id": 3
+  },
+  "listSoldProduct": [
+    {
+      "product": {
+        "id": 2
+      },
+      "quantity": 2
+    },
+    {
+      "product": {
+        "id": 4
+      },
+      "quantity": 1
+    }
+  ],
+  "listStaffAssigned": [
+    {
+      "staff": {
+        "id": 4
+      },
+      "trainingSession": 12
+    }
+  ]
+}
+{
+  "paymentMethod": "BANKING",
+  "paymentStatus": "PAID",
+  "date": "2025-09-30T18:30:00",
+  "receptionist": {
+    "id": 3
+  },
+  "listSoldProduct": [
+    {
+      "product": {
+        "id": 1
+      },
+      "quantity": 3
+    },
+    {
+      "product": {
+        "id": 5
+      },
+      "quantity": 2
+    }
+  ],
+  "listStaffAssigned": [
+    {
+      "staff": {
+        "id": 4
+      },
+      "trainingSession": 8
+    }
+  ]
+}
+{
+  "paymentMethod": "CARD",
+  "paymentStatus": "PAID",
+  "date": "2025-10-01T09:00:00",
+  "receptionist": {
+    "id": 3
+  },
+  "listSoldProduct": [
+    {
+      "product": {
+        "id": 2
+      },
+      "quantity": 4
+    },
+    {
+      "product": {
+        "id": 3
+      },
+      "quantity": 1
+    }
+  ],
+  "listStaffAssigned": []
+}
+{
+  "paymentMethod": "CASH",
+  "paymentStatus": "PENDING",
+  "date": "2025-10-01T15:30:00",
+  "receptionist": {
+    "id": 3
+  },
+  "listSoldProduct": [],
+  "listStaffAssigned": [
+    {
+      "staff": {
+        "id": 4
+      },
+      "trainingSession": 15
+    }
+  ]
+}
+
+ClassTemplate
+{
+  "name": "Yoga cơ bản",
+  "description": "Lớp yoga dành cho người mới bắt đầu, tập trung vào các động tác căn bản và thở.",
+  "difficultyLevel": "BEGINNER",
+  "status": "ACTIVE"
+}
+{
+  "name": "BodyPump nâng cao",
+  "description": "Lớp tập tạ nhóm, kết hợp nhiều động tác tăng sức mạnh và sức bền.",
+  "difficultyLevel": "ADVANCED",
+  "status": "ACTIVE"
+}
+{
+  "name": "Zumba buổi tối",
+  "description": "Lớp nhảy zumba sôi động, giúp đốt cháy calo và cải thiện tim mạch.",
+  "difficultyLevel": "INTERMEDIATE",
+  "status": "INACTIVE"
+}
+{
+  "name": "Bơi cơ bản",
+  "description": "Lớp học bơi cho trẻ em và người lớn chưa biết bơi.",
+  "difficultyLevel": "BEGINNER",
+  "status": "ACTIVE"
+}
+
+ClassSchedule
+{
+  "startTime": "2025-10-02T08:00:00",
+  "endTime": "2025-10-02T09:30:00",
+  "location": "Phòng 101",
+  "status": "OPEN",
+  "classTemplate": {
+    "id": 1
+  }
+}
+{
+  "startTime": "2025-10-02T18:00:00",
+  "endTime": "2025-10-02T19:00:00",
+  "location": "Studio 2",
+  "status": "OPEN",
+  "classTemplate": {
+    "id": 2
+  }
+}
+{
+  "startTime": "2025-10-03T07:00:00",
+  "endTime": "2025-10-03T08:00:00",
+  "location": "Bể bơi trong nhà",
+  "status": "CANCELLED",
+  "classTemplate": {
+    "id": 4
+  }
+}
+{
+  "startTime": "2025-10-03T20:00:00",
+  "endTime": "2025-10-03T21:00:00",
+  "location": "Phòng 202",
+  "status": "CLOSED",
+  "classTemplate": {
+    "id": 3
+  }
+}
+
+ClassRegis
+{
+  "staff": {
+    "id": 5
+  },
+  "classSchedule": {
+    "id": 2
+  },
+  "description": "Teacher Nguyen Thi Teacher dạy BodyPump nâng cao"
+}
+{
+  "staff": {
+    "id": 2
+  },
+  "classSchedule": {
+    "id": 3
+  },
+  "description": "Staff id=2 phụ trách lớp bơi cơ bản"
+}
+
+FollowClass
+{
+  "followDate": "2025-10-01T09:15:00",
+  "classSchedule": {
+    "id": 1
+  },
+  "member": {
+    "id": 1
+  }
+}

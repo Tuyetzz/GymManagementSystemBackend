@@ -24,9 +24,9 @@ public class FollowClassController {
     }
 
     // Lấy danh sách member đang follow 1 class slot
-    @GetMapping("/classslot/{slotId}")
-    public ResponseEntity<List<FollowClass>> getByClassSlot(@PathVariable Long slotId) {
-        return ResponseEntity.ok(followClassService.getByClassSlot(slotId));
+    @GetMapping("/classschedule/{scheduleId}")
+    public ResponseEntity<List<FollowClass>> getByClassSchedule(@PathVariable Long slotId) {
+        return ResponseEntity.ok(followClassService.getByClassschedule(slotId));
     }
 
     @PostMapping

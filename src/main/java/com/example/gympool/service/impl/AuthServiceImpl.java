@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final StaffRepository staffRepository;
-    private final ManagerRepository managerRepository;
+    private final ReceptionistRepository receptionistRepository;
     private final RefreshTokenService refreshTokenService;
 
     @Override
@@ -92,21 +92,21 @@ public class AuthServiceImpl implements AuthService {
 
                 staffRepository.save(staff);
             }
-            case "MANAGER" -> {
-                if (managerRepository.findByEmail(request.getEmail()).isPresent()) {
+            case "RECEPTIONIST" -> {
+                if (receptionistRepository.findByEmail(request.getEmail()).isPresent()) {
                     throw new RuntimeException("Email already taken");
                 }
 
-                Manager manager = new Manager();
-                manager.setEmail(request.getEmail());
-                manager.setPassword(passwordEncoder.encode(request.getPassword()));
-                manager.setFullName(request.getFullName());
-                manager.setDob(request.getDob());
-                manager.setGender(request.getGender());
-                manager.setPhone(request.getPhone());
-                manager.setRole("MANAGER");
+                Receptionist receptionist = new Receptionist();
+                receptionist.setEmail(request.getEmail());
+                receptionist.setPassword(passwordEncoder.encode(request.getPassword()));
+                receptionist.setFullName(request.getFullName());
+                receptionist.setDob(request.getDob());
+                receptionist.setGender(request.getGender());
+                receptionist.setPhone(request.getPhone());
+                receptionist.setRole("RECEPTIONIST");
 
-                managerRepository.save(manager);
+                receptionistRepository.save(receptionist);
             }
             default -> throw new RuntimeException("Invalid role for employee registration");
         }

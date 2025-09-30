@@ -32,13 +32,10 @@ public class Bill {
     @Column(name = "total", nullable = false)
     private Double total;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id", nullable = false)
-    private Manager manager;
+    @JoinColumn(name = "receptionist_id", nullable = false)
+    private Receptionist receptionist;
 
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SoldProduct> listSoldProduct;
@@ -46,7 +43,4 @@ public class Bill {
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StaffAssigned> listStaffAssigned;
 
-//    // One bill can have many used coupons
-//    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<UsedCoupon> listUsedCoupon;
 }

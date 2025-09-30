@@ -50,10 +50,8 @@ public class ImportBillController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file,
                                             @RequestParam("providerId") Long providerId,
-                                            @RequestParam("managerId") Long managerId,
-                                            @RequestParam("paymentMethod") String paymentMethod,
-                                            @RequestParam("paymentStatus") String paymentStatus) {
-        importBillService.importFromCsv(file, providerId, managerId, paymentMethod, paymentStatus);
+                                            @RequestParam("managerId") Long managerId) {
+        importBillService.importFromCsv(file, providerId, managerId);
         return ResponseEntity.ok("CSV imported successfully");
     }
 }

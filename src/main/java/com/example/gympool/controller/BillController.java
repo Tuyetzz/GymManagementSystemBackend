@@ -43,13 +43,8 @@ public class BillController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<Bill>> getBillsByMember(@PathVariable Long memberId) {
-        return ResponseEntity.ok(billService.getBillsByMemberId(memberId));
-    }
-
-    @GetMapping("/manager/{managerId}")
-    public ResponseEntity<List<Bill>> getBillsByManager(@PathVariable Long managerId) {
-        return ResponseEntity.ok(billService.getBillsByManagerId(managerId));
+    @GetMapping("/receptionist/{receptionistId}")
+    public ResponseEntity<List<Bill>> getBillsByReceptionist(@PathVariable Long ReceptionistId) {
+        return ResponseEntity.ok(billService.getBillsByReceptionistId(ReceptionistId));
     }
 }

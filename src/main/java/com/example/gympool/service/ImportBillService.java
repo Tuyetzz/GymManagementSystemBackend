@@ -11,6 +11,6 @@ public interface ImportBillService {
     ImportBill createImportBill(ImportBill importBill);
     ImportBill updateImportBill(Long id, ImportBill importBill);
     void deleteImportBill(Long id);
-    void importFromCsv(MultipartFile file, Long providerId, Long managerId, String paymentMethod, String paymentStatus);
+    void importFromCsv(MultipartFile file, Long providerId, Long managerId);
 
 }

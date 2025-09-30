@@ -8,8 +8,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "teaching_registration")
-public class TeachingRegistration {
+@Table(name = "class_registration")
+public class ClassRegistration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +19,8 @@ public class TeachingRegistration {
     private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "class_slot_id", nullable = false)
-    private ClassSlot classSlot;
+    @JoinColumn(name = "class_schedule_id", nullable = false)
+    private ClassSchedule classSchedule;
 
     private String description;
 }

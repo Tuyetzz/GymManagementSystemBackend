@@ -10,6 +10,5 @@ public interface BillService {
     void deleteBill(Long id);
     List<Bill> getAllBills();
     Bill getBillById(Long id);
-    List<Bill> getBillsByMemberId(Long memberId);
-    List<Bill> getBillsByManagerId(Long managerId);
+    List<Bill> getBillsByReceptionistId(Long receptionistId);
 }
