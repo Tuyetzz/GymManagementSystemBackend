@@ -21,13 +21,9 @@ public class ImportBill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String paymentMethod;
-    private String paymentStatus;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    private Double total;
 
     // Quan hệ 1-nhiều với ImportedProduct
     @OneToMany(mappedBy = "importBill", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -41,5 +37,5 @@ public class ImportBill {
     // Nhiều ImportBill có thể do 1 Manager lập
     @ManyToOne
     @JoinColumn(name = "manager_id", nullable = false)
-    private Manager manager;
+    private Receptionist receptionist;
 }

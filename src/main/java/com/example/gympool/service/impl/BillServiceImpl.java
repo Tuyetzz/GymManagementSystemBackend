@@ -16,30 +16,27 @@ public class BillServiceImpl implements BillService {
     private final ProductRepository productRepository;
     private final StaffRepository staffRepository;
     private final MemberRepository memberRepository;
-    private final ManagerRepository managerRepository;
+    private final ReceptionistRepository receptionistRepository;
 
     public BillServiceImpl(BillRepository billRepository,
                            ProductRepository productRepository,
                            StaffRepository staffRepository,
                            MemberRepository memberRepository,
-                           ManagerRepository managerRepository) {
+                           ReceptionistRepository receptionistRepository) {
         this.billRepository = billRepository;
         this.productRepository = productRepository;
         this.staffRepository = staffRepository;
         this.memberRepository = memberRepository;
-        this.managerRepository = managerRepository;
+        this.receptionistRepository = receptionistRepository;
     }
 
     @Override
     public Bill createBill(Bill bill) {
-        // lấy member + manager từ DB (tránh bị detached entity)
-        Member member = memberRepository.findById(bill.getMember().getId())
-                .orElseThrow(() -> new RuntimeException("Member not found"));
-        Manager manager = managerRepository.findById(bill.getManager().getId())
-                .orElseThrow(() -> new RuntimeException("Manager not found"));
-
-        bill.setMember(member);
-        bill.setManager(manager);
+        // lấy member + Receptionist từ DB (tránh bị detached entity)
+        Receptionist receptionist = receptionistRepository.findById(bill.getReceptionist().getId())
+                .orElseThrow(() -> new RuntimeException("Receptionist not found"));
+        
+        bill.setReceptionist(receptionist);
 
         // lấy productId
         List<Long> productIds = bill.getListSoldProduct().stream()
@@ -145,12 +142,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<Bill> getBillsByMemberId(Long memberId) {
-        return billRepository.findByMember_Id(memberId);
-    }
-
-    @Override
-    public List<Bill> getBillsByManagerId(Long managerId) {
-        return billRepository.findByManager_Id(managerId);
+    public List<Bill> getBillsByReceptionistId(Long ReceptionistId) {
+        return billRepository.findByReceptionist_Id(ReceptionistId);
     }
 }

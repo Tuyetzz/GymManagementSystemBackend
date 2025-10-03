@@ -9,8 +9,8 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "class_slot")
-public class ClassSlot {
+@Table(name = "classschedule")
+public class ClassSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +25,10 @@ public class ClassSlot {
     @Column(nullable = false, length = 100)
     private String location;
 
-    private int capacity;
-
     @Column(length = 20)
     private String status;   //"OPEN", "CLOSED", "CANCELLED"
 
     @ManyToOne
     @JoinColumn(name = "class_type_id", nullable = false)
-    private ClassType classType;
+    private ClassTemplate classTemplate;
 }

@@ -20,8 +20,8 @@ public class FollowClass {
     private Date followDate;
 
     @ManyToOne
-    @JoinColumn(name = "class_slot_id", nullable = false)
-    private ClassSlot classSlot;
+    @JoinColumn(name = "class_schedule_id", nullable = false)
+    private ClassSchedule classSchedule;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)

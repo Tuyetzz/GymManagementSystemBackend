@@ -2,7 +2,7 @@ package com.example.gympool.service.impl;
 
 import com.example.gympool.entity.*;
 import com.example.gympool.repository.ImportBillRepository;
-import com.example.gympool.repository.ManagerRepository;
+import com.example.gympool.repository.ReceptionistRepository;
 import com.example.gympool.repository.ProductRepository;
 import com.example.gympool.repository.ProviderRepository;
 import com.example.gympool.service.ImportBillService;
@@ -26,16 +26,16 @@ public class ImportBillServiceImpl implements ImportBillService {
     private final ImportBillRepository importBillRepository;
     private final ProductRepository productRepository;
     private final ProviderRepository providerRepository;
-    private final ManagerRepository managerRepository;
+    private final ReceptionistRepository receptionistRepository;
 
     public ImportBillServiceImpl(ImportBillRepository importBillRepository,
                                  ProductRepository productRepository,
                                  ProviderRepository providerRepository,
-                                 ManagerRepository managerRepository) {
+                                 ReceptionistRepository receptionistRepository) {
         this.importBillRepository = importBillRepository;
         this.productRepository = productRepository;
         this.providerRepository = providerRepository;
-        this.managerRepository = managerRepository;
+        this.receptionistRepository = receptionistRepository;
     }
 
     @Override
@@ -67,12 +67,6 @@ public class ImportBillServiceImpl implements ImportBillService {
             productRepository.save(product);
         });
 
-        // Tính total
-        double total = importBill.getImportedProducts().stream()
-                .mapToDouble(ip -> ip.getProduct().getPrice() * ip.getQuantity())
-                .sum();
-        importBill.setTotal(total);
-
         return importBillRepository.save(importBill);
     }
 
@@ -82,11 +76,9 @@ public class ImportBillServiceImpl implements ImportBillService {
         ImportBill bill = importBillRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ImportBill not found with id: " + id));
 
-        bill.setPaymentMethod(importBillDetails.getPaymentMethod());
-        bill.setPaymentStatus(importBillDetails.getPaymentStatus());
         bill.setDate(importBillDetails.getDate());
         bill.setProvider(importBillDetails.getProvider());
-        bill.setManager(importBillDetails.getManager());
+        bill.setReceptionist(importBillDetails.getReceptionist());
 
         // Clear list cũ
         bill.getImportedProducts().clear();
@@ -108,12 +100,6 @@ public class ImportBillServiceImpl implements ImportBillService {
             bill.getImportedProducts().add(ip);
         });
 
-        // Tính lại total
-        double total = bill.getImportedProducts().stream()
-                .mapToDouble(ip -> ip.getProduct().getPrice() * ip.getQuantity())
-                .sum();
-        bill.setTotal(total);
-
         return importBillRepository.save(bill);
     }
 
@@ -134,7 +120,7 @@ public class ImportBillServiceImpl implements ImportBillService {
     }
 
     @Override
-    public void importFromCsv(MultipartFile file, Long providerId, Long managerId, String paymentMethod, String paymentStatus) {
+    public void importFromCsv(MultipartFile file, Long providerId, Long managerId) {
         try (BufferedReader fileReader = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader,
@@ -163,26 +149,18 @@ public class ImportBillServiceImpl implements ImportBillService {
             Provider provider = providerRepository.findById(providerId)
                     .orElseThrow(() -> new RuntimeException("Provider not found with id: " + providerId));
 
-            Manager manager = managerRepository.findById(managerId)
+            Receptionist receptionist = receptionistRepository.findById(managerId)
                     .orElseThrow(() -> new RuntimeException("Manager not found with id: " + managerId));
 
             // Tạo ImportBill
             ImportBill importBill = new ImportBill();
             importBill.setDate(new Date());
-            importBill.setPaymentMethod(paymentMethod);
-            importBill.setPaymentStatus(paymentStatus);
             importBill.setProvider(provider);
-            importBill.setManager(manager);
+            importBill.setReceptionist(receptionist);
 
             // gắn quan hệ
             importedProducts.forEach(ip -> ip.setImportBill(importBill));
             importBill.setImportedProducts(importedProducts);
-
-            // tính tổng tiền
-            double total = importedProducts.stream()
-                    .mapToDouble(ip -> ip.getProduct().getPrice() * ip.getQuantity())
-                    .sum();
-            importBill.setTotal(total);
 
             importBillRepository.save(importBill);
 
