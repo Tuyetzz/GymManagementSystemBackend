@@ -3,6 +3,7 @@ package com.example.gympool.service.impl;
 import com.example.gympool.entity.*;
 import com.example.gympool.repository.*;
 import com.example.gympool.service.ClassScheduleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Service
 public class ClassScheduleServiceImpl implements ClassScheduleService {
 
+    @Autowired
     private final ClassScheduleRepository classScheduleRepository;
 
     public ClassScheduleServiceImpl(ClassScheduleRepository classScheduleRepository) {

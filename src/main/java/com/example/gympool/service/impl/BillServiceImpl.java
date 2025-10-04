@@ -15,7 +15,6 @@ public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final ProductRepository productRepository;
     private final StaffRepository staffRepository;
-    private final MemberRepository memberRepository;
     private final ReceptionistRepository receptionistRepository;
 
     public BillServiceImpl(BillRepository billRepository,
@@ -26,7 +25,6 @@ public class BillServiceImpl implements BillService {
         this.billRepository = billRepository;
         this.productRepository = productRepository;
         this.staffRepository = staffRepository;
-        this.memberRepository = memberRepository;
         this.receptionistRepository = receptionistRepository;
     }
 
@@ -142,7 +140,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<Bill> getBillsByReceptionistId(Long ReceptionistId) {
-        return billRepository.findByReceptionist_Id(ReceptionistId);
+    public List<Bill> getBillsByReceptionistId(Long receptionistId) {
+        return billRepository.findByReceptionist_Id(receptionistId);
     }
 }

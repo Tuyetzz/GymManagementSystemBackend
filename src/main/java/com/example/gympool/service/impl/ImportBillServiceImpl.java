@@ -1,10 +1,7 @@
 package com.example.gympool.service.impl;
 
 import com.example.gympool.entity.*;
-import com.example.gympool.repository.ImportBillRepository;
-import com.example.gympool.repository.ReceptionistRepository;
-import com.example.gympool.repository.ProductRepository;
-import com.example.gympool.repository.ProviderRepository;
+import com.example.gympool.repository.*;
 import com.example.gympool.service.ImportBillService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,16 +23,16 @@ public class ImportBillServiceImpl implements ImportBillService {
     private final ImportBillRepository importBillRepository;
     private final ProductRepository productRepository;
     private final ProviderRepository providerRepository;
-    private final ReceptionistRepository receptionistRepository;
+    private final ManagerRepository managerRepository;
 
     public ImportBillServiceImpl(ImportBillRepository importBillRepository,
                                  ProductRepository productRepository,
                                  ProviderRepository providerRepository,
-                                 ReceptionistRepository receptionistRepository) {
+                                 ManagerRepository managerRepository) {
         this.importBillRepository = importBillRepository;
         this.productRepository = productRepository;
         this.providerRepository = providerRepository;
-        this.receptionistRepository = receptionistRepository;
+        this.managerRepository = managerRepository;
     }
 
     @Override
@@ -78,7 +75,7 @@ public class ImportBillServiceImpl implements ImportBillService {
 
         bill.setDate(importBillDetails.getDate());
         bill.setProvider(importBillDetails.getProvider());
-        bill.setReceptionist(importBillDetails.getReceptionist());
+        bill.setManager(importBillDetails.getManager());
 
         // Clear list cũ
         bill.getImportedProducts().clear();
@@ -149,14 +146,14 @@ public class ImportBillServiceImpl implements ImportBillService {
             Provider provider = providerRepository.findById(providerId)
                     .orElseThrow(() -> new RuntimeException("Provider not found with id: " + providerId));
 
-            Receptionist receptionist = receptionistRepository.findById(managerId)
+            Manager manager = managerRepository.findById(managerId)
                     .orElseThrow(() -> new RuntimeException("Manager not found with id: " + managerId));
 
             // Tạo ImportBill
             ImportBill importBill = new ImportBill();
             importBill.setDate(new Date());
             importBill.setProvider(provider);
-            importBill.setReceptionist(receptionist);
+            importBill.setManager(manager);
 
             // gắn quan hệ
             importedProducts.forEach(ip -> ip.setImportBill(importBill));

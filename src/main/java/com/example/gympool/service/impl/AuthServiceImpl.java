@@ -23,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
     private final StaffRepository staffRepository;
     private final ReceptionistRepository receptionistRepository;
     private final RefreshTokenService refreshTokenService;
+    private final ManagerRepository managerRepository;
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -107,6 +108,22 @@ public class AuthServiceImpl implements AuthService {
                 receptionist.setRole("RECEPTIONIST");
 
                 receptionistRepository.save(receptionist);
+            }
+            case "MANAGER" -> {
+                if (managerRepository.findByEmail(request.getEmail()).isPresent()) {
+                    throw new RuntimeException("Email already taken");
+                }
+
+                Manager manager = new Manager();
+                manager.setEmail(request.getEmail());
+                manager.setPassword(passwordEncoder.encode(request.getPassword()));
+                manager.setFullName(request.getFullName());
+                manager.setDob(request.getDob());
+                manager.setGender(request.getGender());
+                manager.setPhone(request.getPhone());
+                manager.setRole("MANAGER");
+
+                managerRepository.save(manager);
             }
             default -> throw new RuntimeException("Invalid role for employee registration");
         }

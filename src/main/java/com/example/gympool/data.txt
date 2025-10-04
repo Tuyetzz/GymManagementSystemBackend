@@ -124,14 +124,25 @@ Receptionist
   "role": "RECEPTIONIST"
 }
 
+Manager
+{
+  "email": "manager@example.com",
+  "password": "StrongPassword123",
+  "fullName": "Nguyen Van A",
+  "dob": "1980-05-15",
+  "gender": "Male",
+  "phone": "0123456789",
+  "role": "MANAGER"
+}
+
 ImportBill
 {
   "date": "2025-09-30T10:30:00",
   "provider": {
     "id": 1
   },
-  "receptionist": {
-    "id": 3
+  "manager": {
+    "id": 6
   },
   "importedProducts": [
     {
@@ -153,8 +164,8 @@ ImportBill
   "provider": {
     "id": 2
   },
-  "receptionist": {
-    "id": 3
+  "manager": {
+    "id": 6
   },
   "importedProducts": [
     {
