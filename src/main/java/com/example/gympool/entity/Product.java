@@ -23,7 +23,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false, length = 50)
-    private String type;    //clothes, powder
+    private String type;
 
     @Column(nullable = false)
     private Double price;

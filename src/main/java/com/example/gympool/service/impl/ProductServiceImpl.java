@@ -17,12 +17,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addProduct(Product product) {
-        productRepository.save(product); // save = insert
+        product.setQuantity(0);
+        productRepository.save(product);
     }
 
     @Override
     public void updateProduct(Product product) {
-        productRepository.save(product); // save = update
+        if(product.getQuantity()<0){
+            throw new IllegalArgumentException("Product quantity can not be smaller than 0");
+        }
+        productRepository.save(product);
     }
 
     @Override

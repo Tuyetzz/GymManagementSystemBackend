@@ -44,14 +44,12 @@ public class BillServiceImpl implements BillService {
         Map<Long, Product> productMap = productRepository.findAllById(productIds)
                 .stream().collect(Collectors.toMap(Product::getId, p -> p));
 
-        // gắn product + giảm stock
         bill.getListSoldProduct().forEach(sp -> {
             Product product = productMap.get(sp.getProduct().getId());
             if (product == null) throw new RuntimeException("Product not found");
             sp.setProduct(product);
             sp.setBill(bill);
 
-            // giảm tồn kho
             int newQuantity = product.getQuantity() - sp.getQuantity();
             if (newQuantity < 0) throw new RuntimeException("Not enough stock for product: " + product.getName());
             product.setQuantity(newQuantity);
