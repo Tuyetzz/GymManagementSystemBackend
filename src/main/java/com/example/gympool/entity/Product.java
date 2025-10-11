@@ -28,6 +28,8 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
+    private Double importPrice;
+
     @Column(length = 50)
     private String brand;
 

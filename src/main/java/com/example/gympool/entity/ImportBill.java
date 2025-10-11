@@ -24,6 +24,7 @@ public class ImportBill {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    private Double price;
 
     // Quan hệ 1-nhiều với ImportedProduct
     @OneToMany(mappedBy = "importBill", cascade = CascadeType.ALL, orphanRemoval = true)

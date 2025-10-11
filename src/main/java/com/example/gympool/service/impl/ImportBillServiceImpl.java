@@ -37,30 +37,28 @@ public class ImportBillServiceImpl implements ImportBillService {
 
     @Override
     public ImportBill createImportBill(ImportBill importBill) {
-        // Lấy tất cả productId từ importedProducts
         List<Long> productIds = importBill.getImportedProducts().stream()
                 .map(ip -> ip.getProduct().getId())
                 .toList();
 
-        // Fetch 1 lần tất cả product từ DB
         Map<Long, Product> productMap = productRepository.findAllById(productIds)
                 .stream()
                 .collect(Collectors.toMap(Product::getId, p -> p));
 
-        // Gắn product + importBill + tăng stock
         importBill.getImportedProducts().forEach(ip -> {
             Product product = productMap.get(ip.getProduct().getId());
             if (product == null) {
                 throw new RuntimeException("Product not found with id: " + ip.getProduct().getId());
             }
-            // gắn product & bill
             ip.setProduct(product);
             ip.setImportBill(importBill);
 
-            // tăng tồn kho
             int newQuantity = product.getQuantity() + ip.getQuantity();
             product.setQuantity(newQuantity);
-            // lưu product lại để cập nhật tồn kho
+
+            Double importPrice = ip.getProduct().getImportPrice();
+            product.setImportPrice(importPrice);
+
             productRepository.save(product);
         });
 
@@ -77,10 +75,14 @@ public class ImportBillServiceImpl implements ImportBillService {
         bill.setProvider(importBillDetails.getProvider());
         bill.setManager(importBillDetails.getManager());
 
-        // Clear list cũ
+        bill.getImportedProducts().forEach(ip -> {
+            Product product = ip.getProduct();
+            product.setQuantity(product.getQuantity() - ip.getQuantity());
+            productRepository.save(product);
+        });
+
         bill.getImportedProducts().clear();
 
-        // Lấy tất cả productId mới
         List<Long> productIds = importBillDetails.getImportedProducts().stream()
                 .map(ip -> ip.getProduct().getId())
                 .toList();
@@ -89,12 +91,19 @@ public class ImportBillServiceImpl implements ImportBillService {
                 .stream()
                 .collect(Collectors.toMap(Product::getId, p -> p));
 
-        // Thêm importedProducts mới
         importBillDetails.getImportedProducts().forEach(ip -> {
             Product product = productMap.get(ip.getProduct().getId());
             ip.setProduct(product);
             ip.setImportBill(bill);
             bill.getImportedProducts().add(ip);
+
+            int newQuantity = product.getQuantity() + ip.getQuantity();
+            product.setQuantity(newQuantity);
+
+            Double importPrice = ip.getProduct().getImportPrice();
+            product.setImportPrice(importPrice);
+
+            productRepository.save(product);
         });
 
         return importBillRepository.save(bill);
