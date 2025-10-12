@@ -3,6 +3,7 @@ package com.example.gympool.service.impl;
 import com.example.gympool.entity.*;
 import com.example.gympool.repository.*;
 import com.example.gympool.service.ImportBillService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.csv.CSVFormat;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ImportBillServiceImpl implements ImportBillService {
 
     private final ImportBillRepository importBillRepository;

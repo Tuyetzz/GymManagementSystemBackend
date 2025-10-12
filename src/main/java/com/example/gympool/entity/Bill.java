@@ -43,4 +43,11 @@ public class Bill {
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StaffAssigned> listStaffAssigned;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "issuedcoupon_id")
+    private IssuedCoupon issuedCoupon;
 }

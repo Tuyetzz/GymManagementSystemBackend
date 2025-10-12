@@ -11,4 +11,5 @@ public interface BillService {
     List<Bill> getAllBills();
     Bill getBillById(Long id);
     List<Bill> getBillsByReceptionistId(Long receptionistId);
+    List<Bill> getBillByMemberId(Long memberId);
 }
