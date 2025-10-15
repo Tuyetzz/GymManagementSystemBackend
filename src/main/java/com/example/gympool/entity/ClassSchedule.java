@@ -17,10 +17,10 @@ public class ClassSchedule {
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date startTime;
+    private Date startTime; //buoi hoc thuc te
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date endTime;
+    private Date endTime;   //buoi hoc thuc te
 
     @Column(nullable = false, length = 100)
     private String location;
@@ -31,4 +31,8 @@ public class ClassSchedule {
     @ManyToOne
     @JoinColumn(name = "class_type_id", nullable = false)
     private ClassTemplate classTemplate;
+
+    @ManyToOne
+    @JoinColumn(name = "schedule_pattern_id", nullable = true)
+    private SchedulePattern schedulePattern;
 }

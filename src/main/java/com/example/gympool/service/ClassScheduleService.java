@@ -11,4 +11,5 @@ public interface ClassScheduleService {
     ClassSchedule create(ClassSchedule classSchedule);
     ClassSchedule update(Long id, ClassSchedule classSchedule);
     void delete(Long id);
+    List<ClassSchedule> getByClassTemplateId(Long id);
 }

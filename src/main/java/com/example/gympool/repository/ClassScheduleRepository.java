@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ClassScheduleRepository extends JpaRepository<ClassSchedule, Long> {
-    List<ClassSchedule> findByClassTemplate(ClassTemplate classTemplate);
+    List<ClassSchedule> findByClassTemplateId(Long classTemplateId);
     List<ClassSchedule> findByStatus(String status);
     List<ClassSchedule> findByStartTimeBetween(Date start, Date end);
 }

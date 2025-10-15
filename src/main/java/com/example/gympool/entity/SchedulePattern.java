@@ -16,20 +16,17 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Coupon {
-
+public class SchedulePattern {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String code;
-    private String discountType;    //PERCENTAGE, FIXED_AMOUNT
-    private Double discountValue;
+    private String location;
+    private String daysOfWeek; // Ví dụ: "MONDAY,WEDNESDAY,FRIDAY" (lưu dạng chuỗi)
 
-    private Date startDate;
-    private Date endDate;
+    private Date timeStart;
+    private Date timeEnd;
 
-    private String status;  // ACTIVE, EXPIRE
-    private String scope;
-    private Integer totalUses;
+    private Date classStartDate; // Bắt đầu áp dụng từ ngày
+    private Date classEndDate;   // Kết thúc áp dụng vào ngày
 }

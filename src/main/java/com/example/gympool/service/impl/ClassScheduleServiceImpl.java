@@ -6,17 +6,19 @@ import com.example.gympool.service.ClassScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ClassScheduleServiceImpl implements ClassScheduleService {
 
-    @Autowired
     private final ClassScheduleRepository classScheduleRepository;
+    private final ClassTemplateRepository classTemplateRepository;
 
-    public ClassScheduleServiceImpl(ClassScheduleRepository classScheduleRepository) {
+    public ClassScheduleServiceImpl(ClassScheduleRepository classScheduleRepository, ClassTemplateRepository classTemplateRepository) {
         this.classScheduleRepository = classScheduleRepository;
+        this.classTemplateRepository = classTemplateRepository;
     }
 
     @Override
@@ -51,5 +53,10 @@ public class ClassScheduleServiceImpl implements ClassScheduleService {
     @Override
     public void delete(Long id) {
         classScheduleRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ClassSchedule> getByClassTemplateId(Long id) {
+        return classScheduleRepository.findByClassTemplateId(id);
     }
 }
