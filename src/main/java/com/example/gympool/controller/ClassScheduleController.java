@@ -51,4 +51,11 @@ public class ClassScheduleController {
         List<ClassSchedule> schedules = classScheduleService.getByClassTemplateId(templateId);
         return ResponseEntity.ok(schedules);
     }
+
+    @PostMapping("/generate")
+    public ResponseEntity<List<ClassSchedule>> generateSchedules(@RequestBody ClassSchedule classSchedule) {
+        List<ClassSchedule> result = classScheduleService.generateSchedulesFromPattern(classSchedule);
+        return ResponseEntity.ok(result);
+    }
+
 }

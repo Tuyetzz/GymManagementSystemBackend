@@ -1,14 +1,13 @@
 package com.example.gympool.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -16,6 +15,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "schedule_pattern")
 public class SchedulePattern {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,15 @@ public class SchedulePattern {
     private String location;
     private String daysOfWeek; // Ví dụ: "MONDAY,WEDNESDAY,FRIDAY" (lưu dạng chuỗi)
 
-    private Date timeStart;
-    private Date timeEnd;
+    @Column(nullable = false)
+    private LocalTime timeStart;
 
-    private Date classStartDate; // Bắt đầu áp dụng từ ngày
-    private Date classEndDate;   // Kết thúc áp dụng vào ngày
+    @Column(nullable = false)
+    private LocalTime timeEnd;
+
+    @Column(nullable = false)
+    private LocalDate classStartDate; // Bắt đầu áp dụng từ ngày
+
+    @Column(nullable = false)
+    private LocalDate classEndDate;   // Kết thúc áp dụng vào ngày
 }

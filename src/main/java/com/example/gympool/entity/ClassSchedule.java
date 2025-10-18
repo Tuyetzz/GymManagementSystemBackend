@@ -2,7 +2,9 @@ package com.example.gympool.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.Date;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @Getter
@@ -16,13 +18,9 @@ public class ClassSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startTime; //buoi hoc thuc te
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endTime;   //buoi hoc thuc te
-
-    @Column(nullable = false, length = 100)
     private String location;
 
     @Column(length = 20)
@@ -35,4 +33,7 @@ public class ClassSchedule {
     @ManyToOne
     @JoinColumn(name = "schedule_pattern_id", nullable = true)
     private SchedulePattern schedulePattern;
+
+    //TODO : BE : Delete batch, get week, add batch
+    //TODO : FE : Add (special class(no pattern) - course(no attribute))
 }
