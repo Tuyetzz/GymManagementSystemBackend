@@ -51,7 +51,7 @@ public class FeedbackController {
             if (images != null && images.length > 0) {
                 // Base path tuyệt đối
                 String uploadDir = System.getProperty("user.dir") + File.separator +
-                        "uploads" + File.separator + "feedback" + File.separator;
+                        "image" + File.separator + "feedback" + File.separator;
                 File dir = new File(uploadDir);
                 if (!dir.exists()) {
                     dir.mkdirs();
@@ -69,7 +69,7 @@ public class FeedbackController {
 
                         // Tạo attachment
                         FeedbackAttachment attachment = new FeedbackAttachment();
-                        attachment.setFilePath("uploads/feedback/" + fileName); // lưu relative để trả ra client
+                        attachment.setFilePath("image/feedback/" + fileName); // lưu relative để trả ra client
                         attachment.setFileType(file.getContentType());
                         attachment.setFileSize(file.getSize());
 
