@@ -3,6 +3,7 @@ package com.example.gympool.service.impl;
 import com.example.gympool.dto.LoginRequest;
 import com.example.gympool.dto.LoginResponse;
 import com.example.gympool.dto.RegisterRequest;
+import com.example.gympool.dto.UserResponse;
 import com.example.gympool.entity.*;
 import com.example.gympool.repository.*;
 import com.example.gympool.security.JwtTokenProvider;
@@ -38,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
-        return new LoginResponse(accessToken, refreshToken.getToken(), user.getRole(), user.getFullName());
+        return new LoginResponse(accessToken, refreshToken.getToken(), new UserResponse(user));
     }
 
     @Override
