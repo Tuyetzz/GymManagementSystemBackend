@@ -11,36 +11,34 @@ import java.util.List;
 @RequestMapping("/api/class-registrations")
 public class ClassRegistrationController {
 
-    private final ClassRegistrationService teachingRegistrationService;
+    private final ClassRegistrationService classRegistrationService;
 
-    public ClassRegistrationController(ClassRegistrationService teachingRegistrationService) {
-        this.teachingRegistrationService = teachingRegistrationService;
+    public ClassRegistrationController(ClassRegistrationService classRegistrationService) {
+        this.classRegistrationService = classRegistrationService;
     }
 
-    // Lấy danh sách lớp mà staff đã đăng ký
+    // Lấy danh sách lớp mà staff đã đăng ký dạy
     @GetMapping("/staff/{staffId}")
     public ResponseEntity<List<ClassRegistration>> getByStaff(@PathVariable Long staffId) {
-        return ResponseEntity.ok(teachingRegistrationService.getByStaff(staffId));
+        return ResponseEntity.ok(classRegistrationService.getByStaff(staffId));
     }
 
-    // Lấy danh sách giáo viên đã đăng ký cho class slot
-    @GetMapping("/classschedule/{scheduleId}")
-    public ResponseEntity<List<ClassRegistration>> getByClassSlot(@PathVariable Long slotId) {
-        return ResponseEntity.ok(teachingRegistrationService.getByClassSlot(slotId));
+    // Lấy danh sách giáo viên đã đăng ký cho class template
+    @GetMapping("/classtemplate/{templateId}")
+    public ResponseEntity<List<ClassRegistration>> getByClassTemplate(@PathVariable Long templateId) {
+        return ResponseEntity.ok(classRegistrationService.getByClassTemplate(templateId));
     }
 
     // Staff đăng ký dạy 1 lớp
     @PostMapping
-    public ResponseEntity<ClassRegistration> registerTeaching(
-            @RequestBody ClassRegistration reg) {
-        return ResponseEntity.ok(teachingRegistrationService.registerTeaching(reg));
+    public ResponseEntity<ClassRegistration> registerTeaching(@RequestBody ClassRegistration reg) {
+        return ResponseEntity.ok(classRegistrationService.registerTeaching(reg));
     }
-
 
     // Staff hủy đăng ký dạy
     @DeleteMapping
     public ResponseEntity<String> unregisterTeaching(@RequestBody ClassRegistration reg) {
-        teachingRegistrationService.unregisterTeaching(reg);
+        classRegistrationService.unregisterTeaching(reg);
         return ResponseEntity.ok("Teaching registration removed successfully");
     }
 }

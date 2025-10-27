@@ -1,12 +1,13 @@
 package com.example.gympool.service.impl;
 
-import com.example.gympool.entity.ClassSchedule;
-import com.example.gympool.entity.Staff;
 import com.example.gympool.entity.ClassRegistration;
-import com.example.gympool.repository.ClassScheduleRepository;
-import com.example.gympool.repository.StaffRepository;
+import com.example.gympool.entity.ClassTemplate;
+import com.example.gympool.entity.Staff;
 import com.example.gympool.repository.ClassRegistrationRepository;
+import com.example.gympool.repository.ClassTemplateRepository;
+import com.example.gympool.repository.StaffRepository;
 import com.example.gympool.service.ClassRegistrationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +15,14 @@ import java.util.List;
 @Service
 public class ClassRegistrationServiceImpl implements ClassRegistrationService {
 
-    private final ClassRegistrationRepository classRegistrationRepository;
-    private final StaffRepository staffRepository;
-    private final ClassScheduleRepository classScheduleRepository;
+    @Autowired
+    private ClassRegistrationRepository classRegistrationRepository;
 
-    public ClassRegistrationServiceImpl(ClassRegistrationRepository classRegistrationRepository,
-                                        StaffRepository staffRepository,
-                                        ClassScheduleRepository classScheduleRepository) {
-        this.classRegistrationRepository = classRegistrationRepository;
-        this.staffRepository = staffRepository;
-        this.classScheduleRepository = classScheduleRepository;
-    }
+    @Autowired
+    private StaffRepository staffRepository;
+
+    @Autowired
+    private ClassTemplateRepository classTemplateRepository;
 
     @Override
     public List<ClassRegistration> getByStaff(Long staffId) {
@@ -34,49 +32,47 @@ public class ClassRegistrationServiceImpl implements ClassRegistrationService {
     }
 
     @Override
-    public List<ClassRegistration> getByClassSlot(Long slotId) {
-        ClassSchedule slot = classScheduleRepository.findById(slotId)
-                .orElseThrow(() -> new RuntimeException("ClassSlot not found with id: " + slotId));
-        return classRegistrationRepository.findByClassSchedule(slot);
+    public List<ClassRegistration> getByClassTemplate(Long templateId) {
+        ClassTemplate template = classTemplateRepository.findById(templateId)
+                .orElseThrow(() -> new RuntimeException("ClassTemplate not found with id: " + templateId));
+        return classRegistrationRepository.findByClassTemplate(template);
     }
 
     @Override
     public ClassRegistration registerTeaching(ClassRegistration reg) {
-        //  slot
-        ClassSchedule slot = classScheduleRepository.findById(reg.getClassSchedule().getId())
-                .orElseThrow(() -> new RuntimeException("ClassSlot not found with id: " + reg.getClassSchedule().getId()));
-        //  staff
+        // Lấy entity từ DB
         Staff staff = staffRepository.findById(reg.getStaff().getId())
                 .orElseThrow(() -> new RuntimeException("Staff not found with id: " + reg.getStaff().getId()));
+        ClassTemplate template = classTemplateRepository.findById(reg.getClassTemplate().getId())
+                .orElseThrow(() -> new RuntimeException("ClassTemplate not found with id: " + reg.getClassTemplate().getId()));
 
-        // check trùng
-        if (!classRegistrationRepository.findByClassSchedule(slot).isEmpty()) {
-            throw new RuntimeException("This class already has a teacher registered");
+        // Kiểm tra lớp đã có người đăng ký chưa
+        List<ClassRegistration> existing = classRegistrationRepository.findByClassTemplate(template);
+        if (!existing.isEmpty()) {
+            throw new RuntimeException("This class template already has a teacher registered.");
         }
 
-        // gắn lại entity từ DB (tránh lỗi transient object)
-        reg.setClassSchedule(slot);
+        // Gắn lại entity từ DB để tránh lỗi transient
         reg.setStaff(staff);
+        reg.setClassTemplate(template);
 
         return classRegistrationRepository.save(reg);
     }
 
-
     @Override
     public void unregisterTeaching(ClassRegistration reg) {
-        Long slotId = reg.getClassSchedule().getId();
         Long staffId = reg.getStaff().getId();
+        Long templateId = reg.getClassTemplate().getId();
 
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new RuntimeException("Staff not found with id: " + staffId));
 
         classRegistrationRepository.findByStaff(staff).stream()
-                .filter(tr -> tr.getClassSchedule().getId().equals(slotId))
+                .filter(r -> r.getClassTemplate().getId().equals(templateId))
                 .findFirst()
                 .ifPresentOrElse(
                         classRegistrationRepository::delete,
-                        () -> { throw new RuntimeException("TeachingRegistration not found"); }
+                        () -> { throw new RuntimeException("Registration not found for this class template."); }
                 );
     }
-
 }

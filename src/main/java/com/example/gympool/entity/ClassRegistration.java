@@ -19,8 +19,8 @@ public class ClassRegistration {
     private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "class_schedule_id", nullable = false)
-    private ClassSchedule classSchedule;
+    @JoinColumn(name = "class_template_id", nullable = false)
+    private ClassTemplate classTemplate;
 
     private String description;
 }

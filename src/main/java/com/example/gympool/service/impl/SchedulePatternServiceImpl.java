@@ -35,7 +35,6 @@ public class SchedulePatternServiceImpl implements SchedulePatternService {
         SchedulePattern existingPattern = schedulePatternRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("SchedulePattern not found with id: " + id));
 
-        existingPattern.setLocation(schedulePatternDetails.getLocation());
         existingPattern.setDaysOfWeek(schedulePatternDetails.getDaysOfWeek());
         existingPattern.setTimeStart(schedulePatternDetails.getTimeStart());
         existingPattern.setTimeEnd(schedulePatternDetails.getTimeEnd());

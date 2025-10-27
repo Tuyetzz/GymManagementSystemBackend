@@ -1,10 +1,14 @@
 package com.example.gympool.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,4 +32,8 @@ public class ClassTemplate {
     private String difficultyLevel;
 
     private String status;
+
+    @OneToMany(mappedBy = "classTemplate", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ClassSchedule> classSchedule;
 }

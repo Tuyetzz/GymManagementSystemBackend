@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ClassRegistrationService {
     List<ClassRegistration> getByStaff(Long staffId);
-    List<ClassRegistration> getByClassSlot(Long slotId);
+    List<ClassRegistration> getByClassTemplate(Long templateId);
     // Staff đăng ký dạy 1 lớp
     ClassRegistration registerTeaching(ClassRegistration reg);
 

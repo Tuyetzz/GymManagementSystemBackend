@@ -23,21 +23,22 @@ public class FollowClassController {
         return ResponseEntity.ok(followClassService.getByMember(memberId));
     }
 
-    // Lấy danh sách member đang follow 1 class slot
-    @GetMapping("/classschedule/{scheduleId}")
-    public ResponseEntity<List<FollowClass>> getByClassSchedule(@PathVariable Long slotId) {
-        return ResponseEntity.ok(followClassService.getByClassschedule(slotId));
+    // Lấy danh sách member đang follow 1 class template
+    @GetMapping("/classtemplate/{templateId}")
+    public ResponseEntity<List<FollowClass>> getByClassTemplate(@PathVariable Long templateId) {
+        return ResponseEntity.ok(followClassService.getByClassTemplate(templateId));
     }
 
+    // Member follow 1 lớp
     @PostMapping
     public ResponseEntity<FollowClass> followClass(@RequestBody FollowClass followClass) {
         return ResponseEntity.ok(followClassService.followClass(followClass));
     }
 
+    // Member bỏ follow
     @DeleteMapping
     public ResponseEntity<String> unfollowClass(@RequestBody FollowClass followClass) {
         followClassService.unfollowClass(followClass);
         return ResponseEntity.ok("Unfollow successfully");
     }
-
 }

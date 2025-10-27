@@ -39,6 +39,7 @@ public class ClassTemplateServiceImpl implements ClassTemplateService {
                     existing.setName(classTemplate.getName());
                     existing.setDescription(classTemplate.getDescription());
                     existing.setDifficultyLevel(classTemplate.getDifficultyLevel());
+                    existing.setStatus(classTemplate.getStatus());
                     return classTemplateRepository.save(existing);
                 })
                 .orElseThrow(() -> new RuntimeException("ClassType not found with id " + id));
