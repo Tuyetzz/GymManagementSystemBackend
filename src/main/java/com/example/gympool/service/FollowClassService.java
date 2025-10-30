@@ -9,5 +9,5 @@ public interface FollowClassService {
     // Member follow 1 lớp
     FollowClass followClass(FollowClass  followClass);
     // Member bỏ follow
-    void unfollowClass(FollowClass  followClass);
+    void unfollowClassById(Long followClassId);
 }

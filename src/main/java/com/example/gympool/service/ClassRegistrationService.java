@@ -10,6 +10,6 @@ public interface ClassRegistrationService {
     ClassRegistration registerTeaching(ClassRegistration reg);
 
     // Staff hủy đăng ký dạy
-    void unregisterTeaching(ClassRegistration reg);
+    void unregisterTeachingById(Long registrationId);
 
 }

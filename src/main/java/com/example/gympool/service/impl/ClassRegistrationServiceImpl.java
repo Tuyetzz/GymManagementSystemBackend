@@ -60,19 +60,12 @@ public class ClassRegistrationServiceImpl implements ClassRegistrationService {
     }
 
     @Override
-    public void unregisterTeaching(ClassRegistration reg) {
-        Long staffId = reg.getStaff().getId();
-        Long templateId = reg.getClassTemplate().getId();
-
-        Staff staff = staffRepository.findById(staffId)
-                .orElseThrow(() -> new RuntimeException("Staff not found with id: " + staffId));
-
-        classRegistrationRepository.findByStaff(staff).stream()
-                .filter(r -> r.getClassTemplate().getId().equals(templateId))
-                .findFirst()
-                .ifPresentOrElse(
-                        classRegistrationRepository::delete,
-                        () -> { throw new RuntimeException("Registration not found for this class template."); }
-                );
+    public void unregisterTeachingById(Long registrationId) {
+        // Kiểm tra xem record có tồn tại không để đưa ra lỗi rõ ràng hơn (tùy chọn nhưng nên làm)
+        if (!classRegistrationRepository.existsById(registrationId)) {
+            throw new RuntimeException("Registration not found with id: " + registrationId);
+        }
+        // Chỉ cần gọi deleteById là đủ
+        classRegistrationRepository.deleteById(registrationId);
     }
 }

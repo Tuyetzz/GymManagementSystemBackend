@@ -36,9 +36,9 @@ public class FollowClassController {
     }
 
     // Member bỏ follow
-    @DeleteMapping
-    public ResponseEntity<String> unfollowClass(@RequestBody FollowClass followClass) {
-        followClassService.unfollowClass(followClass);
+    @DeleteMapping("/{id}") // Nhận ID từ URL, ví dụ: /api/follow-classes/123
+    public ResponseEntity<String> unfollowClass(@PathVariable Long id) { // Dùng @PathVariable
+        followClassService.unfollowClassById(id); // Gọi một service mới theo ID
         return ResponseEntity.ok("Unfollow successfully");
     }
 }

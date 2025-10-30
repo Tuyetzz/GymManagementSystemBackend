@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/packageissued")
+@RequestMapping("/api/packageissued")
 @RequiredArgsConstructor
 public class PTPackageIssuedController {
     private final PTPackageIssuedService ptPackageIssuedService;

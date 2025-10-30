@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ptpackage")
+@RequestMapping("/api/ptpackage")
 @RequiredArgsConstructor
 public class PTPackageController {
     private final PTPackageService ptPackageService;

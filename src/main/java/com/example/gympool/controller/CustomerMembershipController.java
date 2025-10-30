@@ -4,6 +4,7 @@ import com.example.gympool.entity.CustomerMembership;
 import com.example.gympool.entity.CustomerMembership;
 import com.example.gympool.service.CustomerMembershipService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/membership")
 @RequiredArgsConstructor
 public class CustomerMembershipController {
-    private CustomerMembershipService customerMembershipService;
+    private final CustomerMembershipService customerMembershipService;
     @GetMapping()
     public List<CustomerMembership> findAll() {
         return customerMembershipService.getAllCustomerMembership();

@@ -67,19 +67,11 @@ public class FollowClassServiceImpl implements FollowClassService {
     }
 
     @Override
-    public void unfollowClass(FollowClass followClass) {
-        Long templateId = followClass.getClassTemplate().getId();
-        Long memberId = followClass.getMember().getId();
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member not found with id: " + memberId));
-
-        followClassRepository.findByMember(member).stream()
-                .filter(fc -> fc.getClassTemplate().getId().equals(templateId))
-                .findFirst()
-                .ifPresentOrElse(
-                        followClassRepository::delete,
-                        () -> { throw new RuntimeException("Follow not found for this class template"); }
-                );
+    public void unfollowClassById(Long followClassId) {
+        // Kiểm tra xem record có tồn tại không trước khi xóa
+        if (!followClassRepository.existsById(followClassId)) {
+            throw new RuntimeException("Follow record not found with id: " + followClassId);
+        }
+        followClassRepository.deleteById(followClassId);
     }
 }

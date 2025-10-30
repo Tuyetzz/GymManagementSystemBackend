@@ -36,9 +36,9 @@ public class ClassRegistrationController {
     }
 
     // Staff hủy đăng ký dạy
-    @DeleteMapping
-    public ResponseEntity<String> unregisterTeaching(@RequestBody ClassRegistration reg) {
-        classRegistrationService.unregisterTeaching(reg);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> unregisterTeaching(@PathVariable Long id) { // Dùng @PathVariable
+        classRegistrationService.unregisterTeachingById(id); // Gọi một service mới theo ID
         return ResponseEntity.ok("Teaching registration removed successfully");
     }
 }
