@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface PTAppointmentRepository extends JpaRepository<PTAppointment, Long> {
-    @Query("SELECT pa FROM PTAppointment pa WHERE pa.member.fullName LIKE %:name%")
+    @Query("SELECT pa FROM PTAppointment pa WHERE pa.ptPackageIssued.member.fullName LIKE %:name%")
     Optional<PTAppointment> findByMemberName(String name);
 
     @Query("SELECT pa FROM PTAppointment pa WHERE pa.staff.fullName LIKE %:name%")

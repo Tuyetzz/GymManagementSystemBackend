@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/membershiptier")
+@RequestMapping("/api/membershiptier")
 @RequiredArgsConstructor
 public class MembershipTierController {
     private final MembershipTierService membershipTierService;

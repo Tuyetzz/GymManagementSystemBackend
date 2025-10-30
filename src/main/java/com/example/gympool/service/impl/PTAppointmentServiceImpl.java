@@ -34,7 +34,6 @@ public class PTAppointmentServiceImpl implements PTAppointmentService {
         if (PTAppointmentUpd.getStartTime() != null) PTAppointment.setStartTime(PTAppointmentUpd.getStartTime());
         if (PTAppointmentUpd.getEndTime() != null) PTAppointment.setEndTime(PTAppointmentUpd.getEndTime());
         if (PTAppointmentUpd.getStaff() != null) PTAppointment.setStaff(PTAppointmentUpd.getStaff());
-        if (PTAppointmentUpd.getMember() != null) PTAppointment.setMember(PTAppointmentUpd.getMember());
         if (PTAppointmentUpd.getStatus() != null) PTAppointment.setStatus(PTAppointmentUpd.getStatus());
         return ptAppointmentRepository.save(PTAppointment);
     }

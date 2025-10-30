@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/membership")
+@RequestMapping("/api/membership")
 @RequiredArgsConstructor
 public class CustomerMembershipController {
     private CustomerMembershipService customerMembershipService;

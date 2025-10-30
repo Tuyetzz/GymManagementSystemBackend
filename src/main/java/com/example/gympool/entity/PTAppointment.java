@@ -27,10 +27,6 @@ public class PTAppointment {
     private PTPackageIssued ptPackageIssued;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-    @ManyToOne
     @JoinColumn(name = "staff_id", nullable = false)
     private Staff staff;
 }
