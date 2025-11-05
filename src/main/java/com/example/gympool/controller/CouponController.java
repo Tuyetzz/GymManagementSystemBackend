@@ -1,12 +1,13 @@
 package com.example.gympool.controller;
 
 import com.example.gympool.entity.Coupon;
+import com.example.gympool.entity.IssuedCoupon;
 import com.example.gympool.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/coupons")
@@ -21,29 +22,33 @@ public class CouponController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Coupon> getCouponById(@PathVariable Long id) {
-        return couponService.getCouponById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    public ResponseEntity<?> getCouponDetail(@PathVariable Long id) {
+        Optional<Coupon> couponOpt = couponService.getCouponById(id);
 
-    @GetMapping("/code/{code}")
-    public ResponseEntity<Coupon> getCouponByCode(@PathVariable String code) {
-        return couponService.getCouponByCode(code)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        if (couponOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Không tìm thấy coupon với id: " + id);
+        }
+
+        Coupon coupon = couponOpt.get();
+        List<IssuedCoupon> issuedList = couponService.getIssuedCouponsByCouponId(coupon);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("coupon", coupon);
+        response.put("issuedCoupons", issuedList);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<Coupon> createCoupon(@RequestBody Coupon coupon) {
-        Coupon created = couponService.createCoupon(coupon);
-        return ResponseEntity.ok(created);
+        Coupon newCoupon = couponService.createCoupon(coupon);
+        return ResponseEntity.ok(newCoupon);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Coupon> updateCoupon(@PathVariable Long id, @RequestBody Coupon coupon) {
-        Coupon updated = couponService.updateCoupon(id, coupon);
-        return ResponseEntity.ok(updated);
+        Coupon updatedCoupon = couponService.updateCoupon(id, coupon);
+        return ResponseEntity.ok(updatedCoupon);
     }
 
     @DeleteMapping("/{id}")

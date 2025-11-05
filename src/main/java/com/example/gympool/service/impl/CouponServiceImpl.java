@@ -1,7 +1,9 @@
 package com.example.gympool.service.impl;
 
 import com.example.gympool.entity.Coupon;
+import com.example.gympool.entity.IssuedCoupon;
 import com.example.gympool.repository.CouponRepository;
+import com.example.gympool.repository.IssuedCouponRepository;
 import com.example.gympool.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
+    private final IssuedCouponRepository issuedCouponRepository;
 
     @Override
     public List<Coupon> getAllCoupons() {
@@ -25,16 +28,9 @@ public class CouponServiceImpl implements CouponService {
         return couponRepository.findById(id);
     }
 
-    @Override
-    public Optional<Coupon> getCouponByCode(String code) {
-        return couponRepository.findByCode(code);
-    }
 
     @Override
     public Coupon createCoupon(Coupon coupon) {
-        if (couponRepository.existsByCode(coupon.getCode())) {
-            throw new RuntimeException("Mã coupon đã tồn tại");
-        }
         return couponRepository.save(coupon);
     }
 
@@ -55,5 +51,10 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void deleteCoupon(Long id) {
         couponRepository.deleteById(id);
+    }
+
+    @Override
+    public List<IssuedCoupon> getIssuedCouponsByCouponId(Coupon coupon) {
+        return issuedCouponRepository.findByCoupon(coupon);
     }
 }
