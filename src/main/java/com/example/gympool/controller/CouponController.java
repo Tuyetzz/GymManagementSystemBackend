@@ -1,12 +1,14 @@
 package com.example.gympool.controller;
 
 import com.example.gympool.entity.Coupon;
+import com.example.gympool.entity.IssuedCoupon;
 import com.example.gympool.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/coupons")
@@ -20,30 +22,52 @@ public class CouponController {
         return ResponseEntity.ok(couponService.getAllCoupons());
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<?> checkCoupon(
+            @RequestParam String code,
+            @RequestParam Long memberId) {
+
+        Optional<Coupon> couponOpt = couponService.getValidCouponForMember(code, memberId);
+
+        if (couponOpt.isPresent()) {
+            return ResponseEntity.ok(couponOpt.get());
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Coupon> getCouponById(@PathVariable Long id) {
-        return couponService.getCouponById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getCouponDetail(@PathVariable Long id) {
+        Optional<Coupon> couponOpt = couponService.getCouponById(id);
+
+        if (couponOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Không tìm thấy coupon với id: " + id);
+        }
+
+        Coupon coupon = couponOpt.get();
+        List<IssuedCoupon> issuedList = couponService.getIssuedCouponsByCouponId(coupon);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("coupon", coupon);
+        response.put("issuedCoupons", issuedList);
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/code/{code}")
-    public ResponseEntity<Coupon> getCouponByCode(@PathVariable String code) {
-        return couponService.getCouponByCode(code)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public ResponseEntity<Coupon> createCoupon(@RequestBody Coupon coupon) {
-        Coupon created = couponService.createCoupon(coupon);
-        return ResponseEntity.ok(created);
+    @PostMapping("/add")
+    public ResponseEntity<?> createCoupon(@RequestBody Coupon couponRequest) {
+        try {
+            couponService.createCouponAndIssueToMembers(couponRequest);
+            return ResponseEntity.ok("Coupon created and issued successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Coupon> updateCoupon(@PathVariable Long id, @RequestBody Coupon coupon) {
-        Coupon updated = couponService.updateCoupon(id, coupon);
-        return ResponseEntity.ok(updated);
+        Coupon updatedCoupon = couponService.updateCoupon(id, coupon);
+        return ResponseEntity.ok(updatedCoupon);
     }
 
     @DeleteMapping("/{id}")

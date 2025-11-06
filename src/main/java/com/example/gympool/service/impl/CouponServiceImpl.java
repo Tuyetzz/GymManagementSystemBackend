@@ -1,7 +1,12 @@
 package com.example.gympool.service.impl;
 
 import com.example.gympool.entity.Coupon;
+import com.example.gympool.entity.IssuedCoupon;
+import com.example.gympool.entity.CustomerMembership;
 import com.example.gympool.repository.CouponRepository;
+import com.example.gympool.repository.IssuedCouponRepository;
+import com.example.gympool.repository.CustomerMembershipRepository;
+import com.example.gympool.repository.MemberRepository;
 import com.example.gympool.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,9 @@ import java.util.Optional;
 public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
+    private final IssuedCouponRepository issuedCouponRepository;
+    private final CustomerMembershipRepository customerMembershipRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public List<Coupon> getAllCoupons() {
@@ -25,17 +33,51 @@ public class CouponServiceImpl implements CouponService {
         return couponRepository.findById(id);
     }
 
-    @Override
-    public Optional<Coupon> getCouponByCode(String code) {
-        return couponRepository.findByCode(code);
-    }
 
     @Override
-    public Coupon createCoupon(Coupon coupon) {
-        if (couponRepository.existsByCode(coupon.getCode())) {
-            throw new RuntimeException("Mã coupon đã tồn tại");
+    public Optional<Coupon> getValidCouponForMember(String code, Long memberId) {
+        // Tìm coupon theo mã code
+        Optional<Coupon> optionalCoupon = couponRepository.findByCode(code);
+        if (optionalCoupon.isEmpty()) {
+            return Optional.empty();
         }
-        return couponRepository.save(coupon);
+
+        Coupon coupon = optionalCoupon.get();
+
+        if (!memberRepository.existsById(memberId)) {
+            return Optional.empty();
+        }
+
+        // Kiểm tra xem issued coupon có tồn tại với trạng thái AVAILABLE không
+        Optional<IssuedCoupon> issued = issuedCouponRepository
+                .findByCouponIdAndMemberIdAndStatus(coupon.getId(), memberId, "AVAILABLE");
+
+        if (issued.isPresent()) {
+            return Optional.of(coupon);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+
+    @Override
+    public void createCouponAndIssueToMembers(Coupon couponRequest) {
+        // 1. Lưu coupon
+        Coupon savedCoupon = couponRepository.save(couponRequest);
+
+        // 2. Tìm tất cả CustomerMembership có tier.name = coupon.scope
+        List<CustomerMembership> matchedMemberships =
+                customerMembershipRepository.findByMembershipPlan_MembershipTier_Name(couponRequest.getScope());
+
+        // 3. Với mỗi member, tạo IssuedCoupon
+        for (CustomerMembership cm : matchedMemberships) {
+            IssuedCoupon issued = new IssuedCoupon();
+            issued.setCoupon(savedCoupon);
+            issued.setMember(cm.getMember());
+            issued.setRemainingUses(3); // ví dụ mặc định 3 lần
+            issued.setStatus("AVAILABLE");
+            issuedCouponRepository.save(issued);
+        }
     }
 
     @Override
@@ -55,5 +97,10 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void deleteCoupon(Long id) {
         couponRepository.deleteById(id);
+    }
+
+    @Override
+    public List<IssuedCoupon> getIssuedCouponsByCouponId(Coupon coupon) {
+        return issuedCouponRepository.findByCoupon(coupon);
     }
 }
