@@ -22,6 +22,20 @@ public class CouponController {
         return ResponseEntity.ok(couponService.getAllCoupons());
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<?> checkCoupon(
+            @RequestParam String code,
+            @RequestParam Long memberId) {
+
+        Optional<Coupon> couponOpt = couponService.getValidCouponForMember(code, memberId);
+
+        if (couponOpt.isPresent()) {
+            return ResponseEntity.ok(couponOpt.get());
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCouponDetail(@PathVariable Long id) {
         Optional<Coupon> couponOpt = couponService.getCouponById(id);
