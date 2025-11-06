@@ -39,4 +39,7 @@ public class User {
     private String phone;
 
     private String role;
+
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    private boolean isDeleted = false;
 }

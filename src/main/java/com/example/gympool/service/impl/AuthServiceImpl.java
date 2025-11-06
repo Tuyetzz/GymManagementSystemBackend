@@ -88,9 +88,9 @@ public class AuthServiceImpl implements AuthService {
                 staff.setPhone(request.getPhone());
                 staff.setRole("STAFF");
 
-                staff.setPosition(null);
-                staff.setSpecialize(null);
-                staff.setHirePrice(null);
+                staff.setPosition(request.getPosition());
+                staff.setSpecialize(request.getSpecialize());
+                staff.setHirePrice(request.getHirePrice());
 
                 staffRepository.save(staff);
             }

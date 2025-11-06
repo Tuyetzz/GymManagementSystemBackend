@@ -13,7 +13,6 @@ import java.util.Date;
 public class Member extends User {
     private String membership;
     private Date joinDate;
-
     private String status;
     private String faceId;
     private String cardId;
