@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface CustomerMembershipRepository extends JpaRepository<CustomerMembership, Long> {
     @Query("SELECT cm FROM CustomerMembership cm WHERE cm.member.fullName LIKE %:name%")
     Optional<CustomerMembership> findByMemberName(String name);
+    List<CustomerMembership> findByMembershipPlan_MembershipTier_Name(String tiername);
 }

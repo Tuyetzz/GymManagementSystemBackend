@@ -2,8 +2,10 @@ package com.example.gympool.service.impl;
 
 import com.example.gympool.entity.Coupon;
 import com.example.gympool.entity.IssuedCoupon;
+import com.example.gympool.entity.CustomerMembership;
 import com.example.gympool.repository.CouponRepository;
 import com.example.gympool.repository.IssuedCouponRepository;
+import com.example.gympool.repository.CustomerMembershipRepository;
 import com.example.gympool.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
     private final IssuedCouponRepository issuedCouponRepository;
+    private final CustomerMembershipRepository customerMembershipRepository;
 
     @Override
     public List<Coupon> getAllCoupons() {
@@ -28,10 +31,24 @@ public class CouponServiceImpl implements CouponService {
         return couponRepository.findById(id);
     }
 
-
     @Override
-    public Coupon createCoupon(Coupon coupon) {
-        return couponRepository.save(coupon);
+    public void createCouponAndIssueToMembers(Coupon couponRequest) {
+        // 1. Lưu coupon
+        Coupon savedCoupon = couponRepository.save(couponRequest);
+
+        // 2. Tìm tất cả CustomerMembership có tier.name = coupon.scope
+        List<CustomerMembership> matchedMemberships =
+                customerMembershipRepository.findByMembershipPlan_MembershipTier_Name(couponRequest.getScope());
+
+        // 3. Với mỗi member, tạo IssuedCoupon
+        for (CustomerMembership cm : matchedMemberships) {
+            IssuedCoupon issued = new IssuedCoupon();
+            issued.setCoupon(savedCoupon);
+            issued.setMember(cm.getMember());
+            issued.setRemainingUses(3); // ví dụ mặc định 3 lần
+            issued.setStatus("AVAILABLE");
+            issuedCouponRepository.save(issued);
+        }
     }
 
     @Override

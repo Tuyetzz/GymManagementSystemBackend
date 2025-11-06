@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface CouponService {
     List<Coupon> getAllCoupons();
     Optional<Coupon> getCouponById(Long id);
-    Coupon createCoupon(Coupon coupon);
     Coupon updateCoupon(Long id, Coupon coupon);
     void deleteCoupon(Long id);
 
     List<IssuedCoupon> getIssuedCouponsByCouponId(Coupon coupon);
+    void createCouponAndIssueToMembers(Coupon coupon);
 }
