@@ -4,6 +4,7 @@ import com.example.gympool.entity.Product;
 import com.example.gympool.repository.ProductRepository;
 import com.example.gympool.service.ProductService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,28 +17,46 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(Product product) {
-        product.setQuantity(0);
-        productRepository.save(product);
+    public Product addProduct(Product product) {
+        product.setStatus(false);
+        // Trả về đối tượng đã được lưu (sẽ chứa ID)
+        return productRepository.save(product);
     }
 
     @Override
-    public void updateProduct(Product product) {
-        if(product.getQuantity()<0){
-            throw new IllegalArgumentException("Product quantity can not be smaller than 0");
-        }
-        productRepository.save(product);
-    }
-
-    @Override
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
-    }
-
-    @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
+    @Transactional
+    public Product updateProduct(Product product) {
+        Product existing = productRepository.findById(product.getId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        existing.setName(product.getName());
+        existing.setType(product.getType());
+        existing.setPrice(product.getPrice());
+        existing.setImportPrice(product.getImportPrice());
+        existing.setBrand(product.getBrand());
+        existing.setQuantity(product.getQuantity());
+        existing.setStatus(product.isStatus());
+
+        // Trả về đối tượng đã được cập nhật
+        return productRepository.save(existing);
+    }
+
+    @Override
+    @Transactional
+    public void softDeleteProduct(Long id) {
+        productRepository.softDeleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void restoreProduct(Long id) {
+        productRepository.restoreById(id);
+    }
+
+    @Override
+    public Product getAvailableProductById(Long id) {
+        return productRepository.findByIdAndStatusFalse(id)
+                .orElseThrow(() -> new RuntimeException("Product not found or is deleted"));
     }
 
     @Override
@@ -47,7 +66,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> getAllAvailableProducts() {
+        return productRepository.findAllByStatusFalse();
+    }
+
+    @Override
+    public List<Product> getAllProductsForAdmin() {
         return productRepository.findAll();
     }
 }

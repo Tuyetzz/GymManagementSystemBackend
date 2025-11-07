@@ -5,10 +5,12 @@ import com.example.gympool.entity.Product;
 import java.util.List;
 
 public interface ProductService {
-    void addProduct(Product product);
-    void updateProduct(Product product);
-    void deleteProduct(Long id);
-    Product getProductById(Long id);
+    Product addProduct(Product product);
+    Product updateProduct(Product product);
+    void softDeleteProduct(Long id);
+    void restoreProduct(Long id);
+    Product getAvailableProductById(Long id);
     Product getProductByName(String name);
-    List<Product> getAllProducts();
+    List<Product> getAllAvailableProducts();
+    List<Product> getAllProductsForAdmin();
 }

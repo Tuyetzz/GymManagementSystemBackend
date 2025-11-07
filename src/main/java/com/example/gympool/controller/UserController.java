@@ -1,5 +1,7 @@
 package com.example.gympool.controller;
 
+import com.example.gympool.dto.RegisterRequest;
+import com.example.gympool.dto.UserDetailResponse;
 import com.example.gympool.entity.User;
 import com.example.gympool.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -53,10 +55,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
-        userService.updateUser(user);
-        return ResponseEntity.ok("User updated successfully");
+    public ResponseEntity<UserDetailResponse> updateUser( // <--- Sửa 1
+                                                          @PathVariable Long id,
+                                                          @RequestBody RegisterRequest request
+    ) {
+        User updatedUser = userService.updateUser(id, request);
+
+        // Trả về DTO mới (đã chứa đủ các trường) cho frontend
+        return ResponseEntity.ok(new UserDetailResponse(updatedUser)); // <--- Sửa 2
     }
 
     // ==================== XOÁ MỀM / KHÔI PHỤC ====================

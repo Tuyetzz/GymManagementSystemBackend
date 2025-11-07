@@ -1,6 +1,9 @@
 package com.example.gympool.service.impl;
 
+import com.example.gympool.dto.RegisterRequest;
+import com.example.gympool.entity.Staff;
 import com.example.gympool.entity.User;
+import com.example.gympool.repository.StaffRepository;
 import com.example.gympool.repository.UserRepository;
 import com.example.gympool.service.UserService;
 import jakarta.transaction.Transactional;
@@ -15,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
+    private StaffRepository staffRepository;
     // ==================== LẤY DỮ LIỆU ====================
 
     @Override
@@ -53,17 +56,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) {
-        // Đảm bảo user tồn tại và chưa bị xoá
-        User existing = getUserById(user.getId());
-        existing.setFullName(user.getFullName());
-        existing.setEmail(user.getEmail());
-        existing.setPhone(user.getPhone());
-        existing.setGender(user.getGender());
-        existing.setDob(user.getDob());
-        existing.setRole(user.getRole());
-        existing.setPassword(user.getPassword());
-        userRepository.save(existing);
+    public User updateUser(Long id, RegisterRequest request) { // <--- Đảm bảo trả về User
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // ... (cập nhật các trường chung: fullName, email, dob...) ...
+        existingUser.setFullName(request.getFullName());
+        existingUser.setEmail(request.getEmail());
+        existingUser.setPhone(request.getPhone());
+        existingUser.setGender(request.getGender());
+        existingUser.setDob(request.getDob());
+        existingUser.setRole(request.getRole());
+
+        // Nếu user này là một Staff...
+        if (existingUser instanceof Staff staff) {
+            staff.setPosition(request.getPosition());
+            staff.setSpecialize(request.getSpecialize());
+            staff.setHirePrice(request.getHirePrice());
+
+            // Lưu và TRẢ VỀ đối tượng Staff đã cập nhật
+            return staffRepository.save(staff);
+        }
+
+        // ... (logic cho các role khác nếu cần) ...
+
+        // Lưu và TRẢ VỀ đối tượng User đã cập nhật
+        return userRepository.save(existingUser);
     }
 
     @Override
