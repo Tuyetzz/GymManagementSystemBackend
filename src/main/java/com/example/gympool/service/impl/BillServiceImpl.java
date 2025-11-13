@@ -61,13 +61,21 @@ public class BillServiceImpl implements BillService {
         bill.getListSoldProduct().forEach(sp -> {
             Product product = productMap.get(sp.getProduct().getId());
             if (product == null) throw new RuntimeException("Product not found");
+
             sp.setProduct(product);
             sp.setBill(bill);
+            if (!"PT".equalsIgnoreCase(product.getType())) {
+                if (product.getQuantity() == null) {
+                    throw new RuntimeException("Product (non-PT) is missing quantity data: " + product.getName());
+                }
+                int newQuantity = product.getQuantity() - sp.getQuantity();
 
-            int newQuantity = product.getQuantity() - sp.getQuantity();
-            if (newQuantity < 0) throw new RuntimeException("Not enough stock for product: " + product.getName());
-            product.setQuantity(newQuantity);
-            productRepository.save(product);
+                if (newQuantity < 0) {
+                    throw new RuntimeException("Not enough stock for product: " + product.getName());
+                }
+                product.setQuantity(newQuantity);
+                productRepository.save(product);
+            }
         });
 
         // staff id
